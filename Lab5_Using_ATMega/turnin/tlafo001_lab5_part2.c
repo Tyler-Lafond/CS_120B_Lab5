@@ -27,7 +27,7 @@ void TickCnt()
 			Cnt_State = Cnt_Unpress;
 			break;
 		case Cnt_Unpress:
-			if ((PINA & 0x03) == 0x00)
+			if ((PINA & 0x03) == 0x02)
 			{
 				if (cnt != 0x09)
 				{
@@ -36,7 +36,7 @@ void TickCnt()
 				}
 				Cnt_State = Cnt_Press_a0;
 			}
-			else if ((PINA & 0x03) == 0x03)
+			else if ((PINA & 0x03) == 0x01)
 			{
 				if (cnt != 0x00)
 				{
@@ -45,7 +45,23 @@ void TickCnt()
 				}
 				Cnt_State = Cnt_Press_a1;
 			}
-			else if ((PINA & 0x03) == 0x02)
+			else if ((PINA & 0x03) == 0x00)
+			{
+				cnt = 0x00;
+				PORTC = cnt;
+				Cnt_State = Cnt_Press_Both;
+			}
+			else if ((PINA & 0x03) == 0x03)
+			{
+				Cnt_State = Cnt_Unpress;
+			}
+			break;
+		case Cnt_Press_a0:
+			if ((PINA & 0x03) == 0x03)
+			{
+				Cnt_State = Cnt_Unpress;
+			}
+			else if ((PINA & 0x03) == 0x00)
 			{
 				cnt = 0x00;
 				PORTC = cnt;
@@ -53,22 +69,6 @@ void TickCnt()
 			}
 			else if ((PINA & 0x03) == 0x01)
 			{
-				Cnt_State = Cnt_Unpress;
-			}
-			break;
-		case Cnt_Press_a0:
-			if ((PINA & 0x03) == 0x01)
-			{
-				Cnt_State = Cnt_Unpress;
-			}
-			else if ((PINA & 0x03) == 0x02)
-			{
-				cnt = 0x00;
-				PORTC = cnt;
-				Cnt_State = Cnt_Press_Both;
-			}
-			else if ((PINA & 0x03) == 0x03)
-			{
 				if (cnt != 0x00)
 				{
 					cnt--;
@@ -76,23 +76,23 @@ void TickCnt()
 				}
 				Cnt_State = Cnt_Press_a1;
 			}
-			else if ((PINA & 0x03) == 0x00)
+			else if ((PINA & 0x03) == 0x02)
 			{
 				Cnt_State = Cnt_Press_a0;
 			}
 			break;
 		case Cnt_Press_a1:
-			if ((PINA & 0x03) == 0x01)
+			if ((PINA & 0x03) == 0x03)
 			{
 				Cnt_State = Cnt_Unpress;
 			}
-			else if ((PINA & 0x03) == 0x02)
+			else if ((PINA & 0x03) == 0x00)
 			{
 				cnt = 0x00;
 				PORTC = cnt;
 				Cnt_State = Cnt_Press_Both;
 			}
-			else if ((PINA & 0x03) == 0x00)
+			else if ((PINA & 0x03) == 0x02)
 			{
 				if (cnt != 0x09)
 				{
@@ -101,31 +101,31 @@ void TickCnt()
 				}
 				Cnt_State = Cnt_Press_a0;
 			}
-			else if ((PINA & 0x03) == 0x03)
+			else if ((PINA & 0x03) == 0x01)
 			{
 				Cnt_State = Cnt_Press_a1;
 			}
 			break;
 		case Cnt_Press_Both:
-			if ((PINA & 0x03) == 0x01)
+			if ((PINA & 0x03) == 0x03)
 			{
 				Cnt_State = Cnt_Unpress;
 			}
-			else if ((PINA & 0x03) == 0x00 || (PINA & 0x03) == 0x03)
+			else if ((PINA & 0x03) == 0x02 || (PINA & 0x03) == 0x01)
 			{
 				Cnt_State = Cnt_Unpress_One;
 			}
-			else if ((PINA & 0x03) == 0x02)
+			else if ((PINA & 0x03) == 0x00)
 			{
 				Cnt_State = Cnt_Press_Both;
 			}
 			break;
 		case Cnt_Unpress_One:
-			if ((PINA & 0x03) == 0x01)
+			if ((PINA & 0x03) == 0x03)
 			{
 				Cnt_State = Cnt_Unpress;
 			}
-			else if ((PINA & 0x03) == 0x02)
+			else if ((PINA & 0x03) == 0x00)
 			{
 				cnt = 0x00;
 				PORTC = cnt;
@@ -133,7 +133,7 @@ void TickCnt()
 			}
 			else if (prev != (PINA & 0x03))
 			{
-				if (prev == 0x03)
+				if (prev == 0x01)
 				{
 					if (cnt != 0x09)
 					{
@@ -142,7 +142,7 @@ void TickCnt()
 					}
 					Cnt_State = Cnt_Press_a0;
 				}
-				else if (prev == 0x00)
+				else if (prev == 0x02)
 				{
 					if (cnt != 0x00)
 					{
@@ -152,7 +152,7 @@ void TickCnt()
 					Cnt_State = Cnt_Press_a1;
 				}
 			}
-			else if (prev == (PINA & 0x02))
+			else if (prev == (PINA & 0x03))
 			{
 				Cnt_State = Cnt_Unpress_One;
 			}
