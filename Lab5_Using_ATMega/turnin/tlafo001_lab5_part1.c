@@ -21,15 +21,7 @@ int main(void) {
 	unsigned char tempC;
 
     while (1) {
-	tempA = PINA;
-	if ((tempA & 0x01) == 0x00)
-	{
-		tempA = tempA | 0x01;
-	}
-	else
-	{
-		tempA = tempA & 0xFE;
-	}
+	tempA = ~PINA;
 	tempC = 0x00;
 
 	if ((tempA & 0x0F) > 12)
